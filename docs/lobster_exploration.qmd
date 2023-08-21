@@ -1,0 +1,65 @@
+---
+title: "Lobster Exploration"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(janitor)
+library(here)
+```
+
+
+### Read in data
+Read in data:
+```{r}
+lobsters <- read_csv(here("data","Lobster_Abundance_All_Years_20210412.csv"), na = c("-99999", "")) %>% 
+  clean_names() %>% 
+  uncount(count)
+```
+
+### Find counts and mean sizes by site & year
+Create a summary table that finds the total counts (see: n()), and mean carapace lengths of lobsters observed in the data set by site and year.
+```{r}
+summary_table <- lobsters %>% 
+  group_by(site, year) %>% 
+  summarize(mean_size = mean(size_mm, na.rm = TRUE), n = n())
+```
+
+Create a ggplot graph of the number of total lobsters observed (y-axis) by year (x-axis) in the study, grouped (either aesthetically or by faceting) by site
+```{r}
+ggplot(data = summary_table, aes(x = year, y = n, group = site, color = site)) + geom_line()
+```
+
+### Find the proportion of legal lobsters at each site for 2020
+
+The legal lobster size (carapace length) in California is 79.76 mm.
+Create a subset that only contains lobster data from 2020 (note: this should be from the original data you read in, not the summary table you created above)
+
+```{r}
+lobsters_2020 <- lobsters %>% 
+  filter(year == 2020)
+```
+
+Write code (you can decide how to do this - there are a number of ways) to find the counts of lobsters observed at each site (only using site as the grouping factor) that are above and below the legal limit. Hint: You may want to add a new column legal that contains “yes” or “no” based on the size of the observed lobster (see dplyr::case_when() for a really nice way to do this), then use group_by() %>% summarize(n()) or dplyr::count() to get counts by group within variables
+
+```{r}
+legal_lobsters_2020 <- lobsters_2020 %>% 
+  
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
